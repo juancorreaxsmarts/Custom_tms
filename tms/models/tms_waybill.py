@@ -393,3 +393,10 @@ class TmsWaybill(models.Model):
             currency = 'PESOS'
         return '%s %s %s/100 %s' % (
             total, currency, decimals or 0.0, currency_type)
+
+
+
+class TmsResPartners(models.Model):
+    _inherit = 'res.partner'
+
+    tms = fields.Boolean(help="tms")

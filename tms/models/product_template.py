@@ -8,6 +8,8 @@ from odoo import _, api, exceptions, fields, models
 class ProductTemplate(models.Model):
     _inherit = "product.template"
 
+    tms_product = fields.Boolean(help="tms")
+    
     tms_product_category = fields.Selection([
         ('freight', 'Freight (Waybill)'),
         ('move', 'Moves (Waybill)'),
