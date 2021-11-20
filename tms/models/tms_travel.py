@@ -190,22 +190,20 @@ class TmsTravel(models.Model):
             rec.state = "draft"
 
     def action_progress(self):
-        if self.waybill_ids:
-            for rec in self:
-                rec.validate_driver_license()
-                rec.validate_vehicle_insurance()
-                travels = rec.search(
-                    [('state', '=', 'progress'), '|',
-                     ('employee_id', '=', rec.employee_id.id),
-                     ('unit_id', '=', rec.unit_id.id)])
-                if len(travels) >= 1:
-                    raise ValidationError(
-                        _('The unit or driver are already in use!'))
-                rec.state = "progress"
-                rec.date_start_real = fields.Datetime.now()
-
-        else:
-            raise ValidationError("Debe llenar las lineas de Carta Porte")
+        for rec in self:
+            if not rec.waybill_ids:
+                raise ValidationError('Debe llenar las lineas de Carta Porte.')
+            rec.validate_driver_license()
+            rec.validate_vehicle_insurance()
+            travels = rec.search(
+                [('state', '=', 'progress'), '|',
+                 ('employee_id', '=', rec.employee_id.id),
+                 ('unit_id', '=', rec.unit_id.id)])
+            if len(travels) >= 1:
+                raise ValidationError(
+                    _('The unit or driver are already in use!'))
+            rec.state = "progress"
+            rec.date_start_real = fields.Datetime.now()
 
     def action_done(self):
         for rec in self:
