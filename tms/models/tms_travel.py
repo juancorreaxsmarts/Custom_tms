@@ -11,7 +11,7 @@ from odoo.exceptions import ValidationError
 
 class TmsTravel(models.Model):
     _name = 'tms.travel'
-    _inherit = 'mail.thread'
+    _inherit = ['mail.thread', 'mail.activity.mixin']
     _description = 'Travel'
     _order = "date desc"
 
@@ -26,7 +26,7 @@ class TmsTravel(models.Model):
         self.tms_tarifas = True
     def Denegar(self):
         self.tms_tarifa_x = True
-        
+
     waybill_ids = fields.Many2many(
         'tms.waybill')
     driver_factor_ids = fields.One2many(
