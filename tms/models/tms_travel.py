@@ -15,6 +15,18 @@ class TmsTravel(models.Model):
     _description = 'Travel'
     _order = "date desc"
 
+
+    partner_ids = fields.Many2many('res.partner',  change_default=True)
+    #pricelist = fields.Many2one('product.pricelist')
+    tms_tarifas = fields.Boolean()
+    tms_tarifa_x = fields.Boolean()
+
+
+    def Permitir(self):
+        self.tms_tarifas = True
+    def Denegar(self):
+        self.tms_tarifa_x = True
+        
     waybill_ids = fields.Many2many(
         'tms.waybill')
     driver_factor_ids = fields.One2many(
