@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <odoo>
+  <record model="ir.ui.view" id="tms_res_users_form">
+    <field name="name">tms.res.partner.form</field>
+    <field name="model">res.users</field>
+    <field name="inherit_id" ref="base.view_users_form"/>
+    <field name="arch" type="xml">
+      <xpath expr="//sheet/notebook/page[last()]" position="after">
+        <page name="TMS_tarifa" string="Validacion de Tarifas">
+          <p>Notificaciones de Tarifas</p>
+            <field name="acceso_tarifas"/>
+        </page>
+      </xpath>
+    </field>
+  </record>
     <record id="view_tms_travel_search" model="ir.ui.view">
         <field name="name">tms.travel.search</field>
         <field name="model">tms.travel</field>
@@ -193,20 +206,21 @@
                                 </field>
                             </group>
                         </page>
-                        <page name="TMS_tarifa" string="Validacion de Tarifas">
+                        <<page name="TMS_tarifa" string="Validacion de Tarifas">
                             <!--field name="partner_id" string="Cliente"/>
                             <field name="tms_tarifas"/ attrs="{'invisible': [('sale_ok', '=', False)]}"
                             attrs="{'readonly': [('sale_ok', '=', False)]}"-->
                             <field name="partner_ids"  attrs="{'readonly': [('tms_tarifas', '=', False)]}">
                               <tree string="Tarifas" editable="bottom">
-                                <field name="name"/>
+                                <field name="name" string="Cliente"/>
                                 <field name="property_product_pricelist"/>
                               </tree>
                             </field>
                             <field name="tms_tarifas" invisible="1"/>
-                            <group attrs="{'invisible': [('tms_tarifas', '=', True)]}"><h4>Debe Crear Una Actividad Para Solicitar Autorizacion</h4></group>
+                            <field name="tms_tarifa_x" invisible="1"/>
                             <group attrs="{'invisible': [('tms_tarifas', '=', False)]}"><h4>Autorizado, Puede Modificar las Tarifas</h4></group>
-                            <button name="Permitir" type="object" string="Aprobar" groups="base.group_system" attrs="{'invisible': [('tms_tarifas', '=', True)]}"/>
+                            <button name="Solicitar" type="object" string="Solicitar Autorizacion" attrs="{'invisible': [('tms_tarifa_x', '=', True)]}"/>
+                            <button name="Permitir" type="object" string="Aprobar" groups="tms.group_tarifas" attrs="{'invisible': [('tms_tarifas', '=', True)]}"/>
                      		</page>
                         <page string="Expense driver factor">
                             <field name="driver_factor_ids" attrs="{'readonly':[('state','in',('done', 'closed'))]}" context="{'default_category': 'driver'}"/>

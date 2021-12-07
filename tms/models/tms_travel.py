@@ -22,10 +22,30 @@ class TmsTravel(models.Model):
     tms_tarifa_x = fields.Boolean()
 
 
+    def Solicitar(self, date_deadline=None, summary='', note='', **act_values):
+        self.tms_tarifa_x = True
+        date_deadline = fields.Date.context_today(self)
+        activity_type = self.env['mail.activity.type'].search([['id', '=', '6']])
+        res_user_id = self.env['res.users'].search([['acceso_tarifas', '=', True]])
+        model_id = self.env['ir.model']._get(self._name).id
+        activities = self.env['mail.activity']
+        for record in self:
+            create_vals = {
+                'activity_type_id': activity_type.id,
+                'summary': summary or activity_type.summary,
+                'automated': True,
+                'note': note or activity_type.default_description,
+                'date_deadline': date_deadline,
+                'res_model_id': model_id,
+                'res_id': record.id,
+                'user_id': res_user_id.id
+            }
+            create_vals.update(act_values)
+            activities |= self.env['mail.activity'].create(create_vals)
+        return activities
+
     def Permitir(self):
         self.tms_tarifas = True
-    def Denegar(self):
-        self.tms_tarifa_x = True
 
     waybill_ids = fields.Many2many(
         'tms.waybill')
@@ -339,3 +359,8 @@ class TmsTravel(models.Model):
         default = dict(default or {})
         default['waybill_ids'] = False
         return super().copy(default)
+
+class ClassName(models.Model):
+    _inherit = 'res.users'
+
+    acceso_tarifas = fields.Boolean()
