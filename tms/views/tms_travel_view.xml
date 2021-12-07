@@ -206,7 +206,7 @@
                                 </field>
                             </group>
                         </page>
-                        <<page name="TMS_tarifa" string="Validacion de Tarifas">
+                        <page name="TMS_tarifa" string="Validacion de Tarifas">
                             <!--field name="partner_id" string="Cliente"/>
                             <field name="tms_tarifas"/ attrs="{'invisible': [('sale_ok', '=', False)]}"
                             attrs="{'readonly': [('sale_ok', '=', False)]}"-->
